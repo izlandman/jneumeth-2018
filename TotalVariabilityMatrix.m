@@ -53,6 +53,10 @@ classdef TotalVariabilityMatrix < handle
         fnr
         % fpr values
         fpr
+        % enrollment ivs
+        ivs_enroll
+        %  testing ivs
+        ivs_test
     end
     methods
         % instantiate the object by providing a universal background model
@@ -102,6 +106,10 @@ classdef TotalVariabilityMatrix < handle
             obj.crr = zeros(obj.n_Channels,obj.n_UBM);
             % store EER results
             obj.eer = zeros(obj.n_Channels,obj.n_UBM);
+            % store enrollment ivs
+            obj.ivs_enroll = cell(obj.n_Channels,obj.n_UBM);
+            % sore testing ivs
+            obj.ivs_test = cell(obj.n_Channels,obj.n_UBM);
         end
         % produce the TVM
         function train(tvm,data,index)
@@ -156,7 +164,8 @@ classdef TotalVariabilityMatrix < handle
                 tvm.fpr = zeros(sub_total,tvm.n_Channels,tvm.n_UBM);
                 tvm.fnr = zeros(sub_total,tvm.n_Channels,tvm.n_UBM);
                 [tvm.crr(channel,:),tvm.eer(channel,:), ...
-                    tvm.fnr(:,channel,:),tvm.fpr(:,channel,:)] = ...
+                    tvm.fnr(:,channel,:),tvm.fpr(:,channel,:),...
+                    tvm.ivs_enroll(channel,:),tvm.ivs_test(channel,:)]= ...
                     iVectorEval(enrollment_data,testing_data,tvm.UBM);
             else
                 sub_total = size(enrollment_data,1)*size(testing_data,1);
@@ -164,7 +173,9 @@ classdef TotalVariabilityMatrix < handle
                 tvm.fnr(:,:,mixture) = zeros(sub_total,tvm.n_Channels);
                 [tvm.crr(channel,mixture),tvm.eer(channel,mixture), ...
                     tvm.fnr(:,channel,mixture),...
-                    tvm.fpr(:,channel,mixture)] = ...
+                    tvm.fpr(:,channel,mixture),...
+                    tvm.ivs_enroll(channel,mixture),...
+                    tvm.ivs_test(channel,mixture)] = ...
                     iVectorEval(enrollment_data,testing_data,...
                     tvm.UBM(mixture));
             end
@@ -326,6 +337,8 @@ classdef TotalVariabilityMatrix < handle
             s.eer = tvm.crr;
             s.fnr = tvm.fnr;
             s.fpr = tvm.fpr;
+            s.ivs_enroll = tvm.ivs_enroll;
+            s.ivs_test = tvm.ivs_test;
             save(full_save,'s');
         end
     end
@@ -351,6 +364,8 @@ classdef TotalVariabilityMatrix < handle
                 newObj.eer = s.eer;
                 newObj.fnr = s.fnr;
                 newObj.fpr = s.fpr;
+                newObj.ivs_enroll = s.ivs_enroll;
+                newObj.ivs_test = s.ivs_test;
                 obj = newObj;
             else
                 obj = s;
