@@ -1,0 +1,44 @@
+# Parameter File for experiments
+#
+# subjects
+109
+#
+#
+# files, list as many as necessary. assumes they are sessions!
+4
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R01.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R02.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R03.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R04.list
+#
+#
+# if the files are .htk these next lines provide block size and overlap
+0 0
+#
+#
+# number of iterations to perform experiments
+6
+#
+#
+# elements to withhold for testing data
+1
+#
+#
+# number of mixtures for UBM
+2 4 8 16
+#
+#
+# number of iterations to build UBM
+20
+#
+#
+# ds_factor, scaling for UBM generation
+1
+#
+#
+# save_location, where to write experiment using full pathname
+C:\Users\NIL\Documents\_NeuroNixCopy\PhysioNet\paramTest
+#
+#
+#
+EOF
