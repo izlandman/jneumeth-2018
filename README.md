@@ -125,7 +125,7 @@ epochVcrr() is more function in that it takes in four experiment folders. It is 
 
 ## Major Components
 
-Within these experiments are the major tools to build and evaluate the Mahalanobis Distance classifier from La Rocca, produce Universal Background Models, evaluate GMM-UBMs, and evaluate I-Vectors.
+Within these experiments are the major tools to build and evaluate the Mahalanobis Distance classifier from La Rocca, produce Universal Background Models, evaluate GMM-UBMs, and evaluate I-Vectors. The functionality of these tools is limited to the scope of the paper/experiments. However, updated class specific tools (a Universal Background Model class and Total Variability Matrix class) are in progress. These should streamline the operation of UBMs/TVMs/GMM/I-Vector development for the Matlab platform.
 
 ### Mahalanobis Distance
 
