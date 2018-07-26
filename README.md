@@ -42,15 +42,23 @@ The PSD and COH features were based on the work of La Rocca et al's 2014 paper: 
 
 Adherence to cross validation is carried out within the algorithm evaluation. Data is split into train and test sets that conforms as closely as possible to the initial exhaustive 6 fold cross validation. This is achieved by performing 6 fold cross validation without replacement of the test epochs ensuring each test is unique. As the data is stored by epoch, it is possible to load test and training simultaneously. This process is further streamlined by altering the original data formats into a common format and file structure: **features** X **channels** in each file that is organized as **subject**/**subject_session_epochsxx.bin**.
 
-## Evaluate epochs
+## Experiments
 
-It is possible to evaluate all features of a given epoch duration against all algorithms.
+In the paper two experiments were carried out. **Experiment 1** followed the protocol of La Rocca's testing each individual channel to build an optimal channel subset using their match score-fusion. **Experiment 2** used the PSD features to test the impact of classification as a function of epoch duration using the available trial data.
+
+### Experiment 1
+
+### Experiment 2
 
 ```
-oneLaRocca(exp_folder, list_folder, trial, block_size, covar_flag, workers)
+experimentTrio(param_file,workers)
 ```
 
-The results of all these experiments will be saved into folders created beneath the **exp_folder** directory. The *list_folder* is search for CEP, COH, and PSD folders from which to draw the appropriate feature sets. It is suggested that the feature folder hierarchy is /XX_sec/TYPE which ensures all features are of the same duration.
+## Results
+
+Performance of the algorithms is evaluated in terms of correct recognition rate (CRR) and equal error rate (EER) averaged over each subject-channel's CV steps. This provides a robust performance metric that can be compared against other EEG classification papers (not all experiments report CCR and/or EER thus having both helps readily compare techniques).
+
+## Major Components
 
 ### Mahalanobis Distance
 
@@ -58,6 +66,4 @@ The results of all these experiments will be saved into folders created beneath 
 
 ### I-Vector
 
-## Produce results
 
-Performance of the algorithms is evaluated in terms of correct classification rate (CCR) and equal error rate (EER) averaged over each subject-channel's CV steps. This provides a robust performance metric that can be compared against other EEG classification papers (not all experiments report CCR and/or EER thus having both helps readily compare techniques).
