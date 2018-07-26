@@ -1,7 +1,7 @@
 % plot multiple ccr_bench results. provide a vector of folder (experiment)
 % numbers and a cell of associated labels for the plot
 
-function ccrPlot(condition)
+function crrPlot(condition)
 
 % statically define the labels. do this by methodology, LaRocca, GMM,
 % I-Vector and feature type Cepstrum, PSD, COH
@@ -106,12 +106,12 @@ ebar_data = zeros(n_folders,4);
 FNR = cell(n_folders,1);
 FPR = cell(n_folders,1);
 for i=1:n_folders
-    f_name = ['exp_' num2str(folders(i),'%04d') filesep 'CCR.bin'];
-    ccr = iVectorBinary(f_name);
-    f_name = ['exp_' num2str(folders(i),'%04d') filesep 'CCR_bench.bin'];
-    ccr_bench = iVectorBinary(f_name);
-    f_name = ['exp_' num2str(folders(i),'%04d') filesep 'mCCR.bin'];
-    mccr = iVectorBinary(f_name);
+    f_name = ['exp_' num2str(folders(i),'%04d') filesep 'CRR.bin'];
+    crr = iVectorBinary(f_name);
+    f_name = ['exp_' num2str(folders(i),'%04d') filesep 'CRR_bench.bin'];
+    crr_bench = iVectorBinary(f_name);
+    f_name = ['exp_' num2str(folders(i),'%04d') filesep 'mCRR.bin'];
+    mcrr = iVectorBinary(f_name);
     f_name = ['exp_' num2str(folders(i),'%04d') filesep 'EER.bin'];
     eer = iVectorBinary(f_name);
     eer = eer/100;
@@ -124,22 +124,22 @@ for i=1:n_folders
     f_name = ['exp_' num2str(folders(i),'%04d') filesep 'mFPR.bin'];
     fpr = iVectorBinary(f_name);
     
-    [channels,elements] = size(mccr);
+    [channels,elements] = size(mcrr);
     if( elements > 1 )
-        plot_data{i,2} = mccr(:,mixture_size);
+        plot_data{i,2} = mcrr(:,mixture_size);
         plot_data{i,4} = meer(:,mixture_size);
     else
-        plot_data{i,2} = mccr;
+        plot_data{i,2} = mcrr;
         plot_data{i,4} = meer;
         
     end
     
-    [channels,elements] = size(ccr_bench);
+    [channels,elements] = size(crr_bench);
     if( elements > 4 )
-        ccr_index = (mixture_size-1)*4+1;
-        plot_data{i,1} = ccr_bench(ccr_bench(:,ccr_index)~=0,ccr_index);
+        crr_index = (mixture_size-1)*4+1;
+        plot_data{i,1} = crr_bench(crr_bench(:,crr_index)~=0,crr_index);
     else
-        plot_data{i,1} = ccr_bench(ccr_bench(:,1)~=0,1);
+        plot_data{i,1} = crr_bench(crr_bench(:,1)~=0,1);
     end
     
     [~,elements] = size(fnr);
@@ -155,7 +155,7 @@ for i=1:n_folders
     ebar_data(i,2) = std(plot_data{i,2});
     ebar_data(i,3) = mean(plot_data{i,4});
     ebar_data(i,4) = std(plot_data{i,4});
-    plot_data{i,3} = [max(ccr(:)), min(ccr(:))];
+    plot_data{i,3} = [max(crr(:)), min(crr(:))];
     plot_data{i,5} = [max(eer(:)), min(eer(:))];
 end
 
