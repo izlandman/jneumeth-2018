@@ -1,5 +1,5 @@
-function [ccr, eer, gmm_scores_mat, fpr, fnr] = ...
-    ubmGmmEvalRocca(training_data, testing_data, ubms, covar_flag, channel)
+function [crr,eer,gmm_scores_mat,fpr,fnr] = ...
+    ubmGmmEvalRocca(training_data,testing_data,ubms,channel)
 
 mixture_count = numel(ubms);
 % build UBM from all data. other variations would be to build it from all
@@ -8,18 +8,13 @@ mixture_count = numel(ubms);
 
 % build training_data from only the channel or from all the subject's
 % channels.
-if( covar_flag == -1 )
-    training_data = training_data(:,channel);
-elseif( covar_flag == 0 )
-    % no change!
-elseif( covar_flag == 1 )
-    % this should probably be a different flag than covar_flag?
-end
+training_data = training_data(:,channel);
+
 
 [speakers, channels] = size(testing_data);
 [features,epochs] = size(training_data{1});
 eer = zeros(1,mixture_count);
-ccr = zeros(1,mixture_count);
+crr = zeros(1,mixture_count);
 gmm_scores_mat = zeros(speakers, speakers, mixture_count);
 fnr = zeros(speakers*speakers,mixture_count);
 fpr = fnr;
@@ -65,7 +60,7 @@ for m=1:mixture_count
     
     gmm_scores_mat(:,:,m) = reshape(gmm_scores,speakers,speakers);
     [~,ind] = sort(gmm_scores_mat(:,:,m),'descend');
-    ccr(m) = sum( ind(1,:) == [1:speakers] ) / speakers;
+    crr(m) = sum( ind(1,:) == [1:speakers] ) / speakers;
     [eer(m), fpr(:,m), fnr(:,m)] = compute_eer_2(gmm_scores,answers,0);
     %fprintf('mixture %d: %f s\n', m, toc(a0));
 end

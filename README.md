@@ -48,6 +48,16 @@ In the paper two experiments were carried out. **Experiment 1** followed the pro
 
 ### Experiment 1
 
+```
+[CRR, mCRR, EER, mEER, mFPR, mFNR, f_CRR, f_mCRR, CRR_bench] = laRoccaControl(varargin)
+
+where varargin controls Mahal or GMM-UBM/I-Vector analysis
+
+varargin @ Mahala -> file_list, fusion_flag, save_folder, workers
+varargin @ GMM-UBM or I-Vector -> file_list, fusion_flag, save_folder, workers, mixtures, iterations, ds_factor, eval_flag
+```
+This experiment does not run from a parameter file so all arguments must be passed with the function. **file_list** is the full path to a list of the features to be evaluated. **fusion_flag** controls if the match score-fusion function is carried out, where 0 is off and anything else is on. **save_folder** provides the location of where the results will be stored. **workers** tells Matlab how large to make the parallel computing workspace. **mixtures** [2 4 8 ... 512] provides the size of Universal Background Models to build and evaluate. **iteations** controls the number of iterations for producing the UBMs and TVMs. **ds_factor** controls re-sampling when building the UBMs, this is generally set to 1. **eval_flag** controls GMM-UBM (0) or I-Vector evaluation (1).
+
 ### Experiment 2
 
 ```

@@ -1,23 +1,17 @@
-function [ccr, eer, iVector_scores_mat, fpr, fnr] = ...
-    iVectorEvalRocca(training_data,testing_data,ubms,covar_flag,channel)
+function [crr,eer,iVector_scores_mat,fpr,fnr] = ...
+    iVectorEvalRocca(training_data,testing_data,ubms,channel)
 
 mixture_count = numel(ubms);
 
 % build training_data from only the channel or from all the subject's
 % channels.
-if( covar_flag == -1 )
-    training_data = training_data(:,channel);
-elseif( covar_flag == 0 )
-    % no change!
-elseif( covar_flag == 1 )
-    % this should probably be a different flag than covar_flag?
-end
+training_data = training_data(:,channel);
 
 % produce I-Vectors for each given UBM mixture
 [speakers, channels] = size(testing_data);
 [features,~] = size(testing_data{1});
 eer = zeros(1,mixture_count);
-ccr = zeros(1,mixture_count);
+crr = zeros(1,mixture_count);
 iVector_scores_mat = zeros(speakers,speakers,mixture_count);
 fpr = zeros(speakers*speakers,mixture_count);
 fnr = fpr;
@@ -92,7 +86,7 @@ for m=1:mixture_count
     % produce scored matrix and evaluate!
     scores = cosineDistance(final_develop_IVs, final_test_IVs);
     [~,ind] = sort(scores,'descend');
-    ccr(m) = sum( ind(1,:) == [1:speakers] ) / speakers;
+    crr(m) = sum( ind(1,:) == [1:speakers] ) / speakers;
     answers = eye(speakers);
     [eer(m), fpr(:,m), fnr(:,m)] = compute_eer_2(scores(:),answers(:),0);  
     iVector_scores_mat(:,:,m) = scores;
