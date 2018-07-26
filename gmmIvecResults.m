@@ -5,7 +5,7 @@
 % should build data to work on and then pass that data to another function
 % that handles evaluation
 
-function [CCR, EER, scores, FPR, FNR] = gmmIvecResults(varargin)
+function [CRR, EER, scores, FPR, FNR] = gmmIvecResults(varargin)
 
 channel_count = varargin{1};
 epochs = varargin{2};
@@ -18,7 +18,7 @@ ds_factor = varargin{8};
 
 n_mixtures = numel(mixtures);
 x_subjects = subject_count * subject_count;
-CCR = zeros(channel_count, n_mixtures, epochs);
+CRR = zeros(channel_count, n_mixtures, epochs);
 EER = zeros(channel_count, n_mixtures, epochs);
 FPR = zeros(x_subjects, n_mixtures, channel_count, epochs);
 FNR = FPR;
@@ -37,7 +37,7 @@ parfor cv_step = 1:epochs
         full_index, subject_count, epochs, cv_step);
     ubms = allUBMs(training_data(:), mixtures, iterations, ...
         ds_factor,0,0);
-    CCR_temp = zeros(channel_count,n_mixtures);
+    CRR_temp = zeros(channel_count,n_mixtures);
     EER_temp = zeros(channel_count,n_mixtures);
     scores_temp = zeros(subject_count,subject_count,n_mixtures,...
         channel_count);
@@ -48,7 +48,7 @@ parfor cv_step = 1:epochs
     if( eval_flag == 0 )
         % produce GMM based results
         for c=1:channel_count
-            [CCR_temp(c,:), EER_temp(c,:), ...
+            [CRR_temp(c,:), EER_temp(c,:), ...
                 scores_temp(:,:,:,c), FPR_temp(:,:,c), ...
                 FNR_temp(:,:,c)] = ubmGmmEvalRocca(...
                 training_data,testing_data(:,c),ubms,c);
@@ -56,7 +56,7 @@ parfor cv_step = 1:epochs
     elseif( eval_flag == 1 )
         % produce IVECTOR based results
         for c=1:channel_count
-            [CCR_temp(c,:), EER_temp(c,:), ...
+            [CRR_temp(c,:), EER_temp(c,:), ...
                 scores_temp(:,:,:,c), FPR_temp(:,:,c), ...
                 FNR_temp(:,:,c)] = iVectorEvalRocca(...
                 training_data, testing_data(:,c), ubms, c);
@@ -64,7 +64,7 @@ parfor cv_step = 1:epochs
     else
         fprintf('Bad eval_flag!\n');
     end
-    CCR(:,:,cv_step) = CCR_temp;
+    CRR(:,:,cv_step) = CRR_temp;
     EER(:,:,cv_step) = EER_temp;
     scores(:,:,:,:,cv_step) = scores_temp;
     FPR(:,:,:,cv_step) = FPR_temp;

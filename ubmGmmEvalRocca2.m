@@ -1,4 +1,4 @@
-function [SUB_SES, SUB, SES, gmm_scores_mat] = ...
+function [SUB_SES, SUB, SES, scores] = ...
     ubmGmmEvalRocca2(ubms, training_data, testing_data, subjects, sessions)
 
 mixture_count = numel(ubms);
@@ -12,7 +12,7 @@ mixture_count = numel(ubms);
 SUB_SES = zeros(2,mixture_count);
 SUB = zeros(subjects,mixture_count);
 SES = zeros(sessions,sessions,2,mixture_count);
-gmm_scores_mat = zeros(subject_tra,subject_tes,mixture_count);
+scores = zeros(subject_tra,subject_tes,mixture_count);
 for m=1:mixture_count
     % ubms contains a mixture of size 1! ignore it!
     ubm = ubms{m};
@@ -34,7 +34,7 @@ for m=1:mixture_count
         gmm_scores(:,sub) = score_gmm_trials2(gmm_subjects, ...
             testing_data(sub,:), ubm);
     end
-    gmm_scores_mat(:,:,m) = gmm_scores;
+    scores(:,:,m) = gmm_scores;
     % average models, find subject CCR
     [SUB_SES(:,m), SUB(:,m), SES(:,:,:,m)] = ...
         scoreReport(gmm_scores,subjects,sessions,0);    

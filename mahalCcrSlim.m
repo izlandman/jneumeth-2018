@@ -9,14 +9,14 @@
 %   cell elements -> FEATURES x EPOCHS
 % covar_flag is an integer
 
-function [SUB_SES, SUB, SES, mahal_dist] = ...
+function [SUB_SES, SUB, SES, scores] = ...
     mahalCcrSlim(training_data, testing_data, subjects, sessions)
 
 % setup variables
 [n_subject_tra, n_session_tra] = size(training_data);
 [n_feat_tra,~] = size(training_data{1,1});
 [n_subject_tes, n_session_tes] = size(testing_data);
-mahal_dist = zeros(n_subject_tra, n_subject_tes, n_session_tes);
+scores = zeros(n_subject_tra, n_subject_tes, n_session_tes);
 
 % build mahal model
 class_mu  = zeros(n_subject_tra, n_feat_tra);
@@ -32,12 +32,12 @@ parfor s=1:n_subject_tra
     % evaluate each test vector to object
     for t_ses=1:n_session_tes
         for t_sub=1:n_subject_tes
-            mahal_dist(s,t_sub,t_ses) = mahal(mahal_obj, ...
+            scores(s,t_sub,t_ses) = mahal(mahal_obj, ...
                 mean(cell2mat(testing_data(t_sub,t_ses)),2)');
         end
     end
 end
 
 % CCR for averaged subject, individual subject, and individual session
-[SUB_SES, SUB, SES] = scoreReport(mahal_dist,subjects, sessions, 1);
+[SUB_SES, SUB, SES] = scoreReport(scores,subjects, sessions, 1);
 end

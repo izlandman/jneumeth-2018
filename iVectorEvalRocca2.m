@@ -1,4 +1,4 @@
-function [SUB_SES, SUB, SES, cosine_scores] = ...
+function [SUB_SES, SUB, SES, scores] = ...
     iVectorEvalRocca2(ubms, training_data, testing_data, subjects, sessions)
 
 mixture_count = numel(ubms);
@@ -12,7 +12,7 @@ SUB_SES = zeros(2,mixture_count);
 SUB = zeros(subjects,mixture_count);
 SES = zeros(sessions,sessions,2,mixture_count);
 % dim 1 is cosine, dim 2 is pLDA
-cosine_scores = zeros(train_major,test_major*test_minor,mixture_count);
+scores = zeros(train_major,test_major*test_minor,mixture_count);
 
 % tell it the max workers, just in case?
 for m=1:mixture_count
@@ -81,9 +81,9 @@ for m=1:mixture_count
     final_test_IVs = V(:, 1:lda_dim)' * test_IV_Speaker;
     
     % produce scored matrix and evaluate!
-    cosine_scores(:,:,m) = cosineDistance(final_develop_IVs,final_test_IVs);
+    scores(:,:,m) = cosineDistance(final_develop_IVs,final_test_IVs);
     [SUB_SES(:,m), SUB(:,m), SES(:,:,:,m)] = ...
-        scoreReport(cosine_scores(:,:,m),subjects, sessions,0);
+        scoreReport(scores(:,:,m),subjects, sessions,0);
 end
 
 end

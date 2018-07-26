@@ -1,4 +1,4 @@
-function [crr,eer,iVector_scores_mat,fpr,fnr] = ...
+function [CRR,EER,scores,FPR,FNR] = ...
     iVectorEvalRocca(training_data,testing_data,ubms,channel)
 
 mixture_count = numel(ubms);
@@ -10,11 +10,11 @@ training_data = training_data(:,channel);
 % produce I-Vectors for each given UBM mixture
 [speakers, channels] = size(testing_data);
 [features,~] = size(testing_data{1});
-eer = zeros(1,mixture_count);
-crr = zeros(1,mixture_count);
-iVector_scores_mat = zeros(speakers,speakers,mixture_count);
-fpr = zeros(speakers*speakers,mixture_count);
-fnr = fpr;
+EER = zeros(1,mixture_count);
+CRR = zeros(1,mixture_count);
+scores = zeros(speakers,speakers,mixture_count);
+FPR = zeros(speakers*speakers,mixture_count);
+FNR = FPR;
 
 % tell it the max workers, just in case?
 for m=1:mixture_count
@@ -86,10 +86,10 @@ for m=1:mixture_count
     % produce scored matrix and evaluate!
     scores = cosineDistance(final_develop_IVs, final_test_IVs);
     [~,ind] = sort(scores,'descend');
-    crr(m) = sum( ind(1,:) == [1:speakers] ) / speakers;
+    CRR(m) = sum( ind(1,:) == [1:speakers] ) / speakers;
     answers = eye(speakers);
-    [eer(m), fpr(:,m), fnr(:,m)] = compute_eer_2(scores(:),answers(:),0);  
-    iVector_scores_mat(:,:,m) = scores;
+    [EER(m), FPR(:,m), FNR(:,m)] = compute_eer_2(scores(:),answers(:),0);  
+    scores(:,:,m) = scores;
 end
 
 end

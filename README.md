@@ -58,6 +58,7 @@ varargin @ GMM-UBM or I-Vector -> file_list, fusion_flag, save_folder, workers, 
 ```
 This experiment does not run from a parameter file so all arguments must be passed with the function. **file_list** is the full path to a list of the features to be evaluated. **fusion_flag** controls if the match score-fusion function is carried out, where 0 is off and anything else is on. **save_folder** provides the location of where the results will be stored. **workers** tells Matlab how large to make the parallel computing workspace. **mixtures** [2 4 8 ... 512] provides the size of Universal Background Models to build and evaluate. **iteations** controls the number of iterations for producing the UBMs and TVMs. **ds_factor** controls re-sampling when building the UBMs, this is generally set to 1. **eval_flag** controls GMM-UBM (0) or I-Vector evaluation (1).
 
+Each experiment should be saved in a separate file location. The tools used to process the results assume a single experiment per folder in order to produce the plots seen in the paper.
 ### Experiment 2
 
 ```
@@ -106,17 +107,49 @@ C:\Users\NIL\Documents\_NeuroNixCopy\PhysioNet\paramTest
 EOF
 
 ```
+Each experiment should be saved in a separate file location. The tools used to process the results assume a single experiment per folder in order to produce the plots seen in the paper.
 
 ## Results
 
 Performance of the algorithms is evaluated in terms of correct recognition rate (CRR) and equal error rate (EER) averaged over each subject-channel's CV steps. This provides a robust performance metric that can be compared against other EEG classification papers (not all experiments report CCR and/or EER thus having both helps readily compare techniques).
 
+Two functions are used to produce results.
+```
+crrPlot(condition)
+epochVcrr(epoch_10, epoch_5, epoch_2, epoch_1)
+```
+
+To use crrPlot() the variable **folders** in the switch statement must be updated to match the proper evaluations. Once mapped, the function operations according to specific figure iterations tried for the paper.
+
+epochVcrr() is more function in that it takes in four experiment folders. It is setup to process epoch duration data from the same series of feature/dataset experiments. Thus each folder should be produced using the same features and base dataset with only a difference in the epoch duration. 
+
 ## Major Components
+
+Within these experiments are the major tools to build and evaluate the Mahalanobis Distance classifier from La Rocca, produce Universal Background Models, evaluate GMM-UBMs, and evaluate I-Vectors.
 
 ### Mahalanobis Distance
 
+```
+[CRR, EER, scores, FPR, FNR] = mahalResults(channel_count, epochs, full_index, subject_count, feature_count)
+[SUB_SES, SUB, SES, scores] = mahalCcrSlim(training_data, testing_data, subjects, sessions)
+```
+
+### Universal Background Models
+
+```
+ubms = allUBMs(data_list, nmix, final_niter, ds_factor, folder, verbose)
+```
+
 ### GMM-UBM
+
+```
+[CRR, EER, scores, FPR, FNR] = ubmGmmEvalRocca(training_data, testing_data, ubms, channel)
+[SUB_SES, SUB, SES, scores] = ubmGmmEvalRocca2(ubms, training_data, testing_data, subjects, sessions)
+```
 
 ### I-Vector
 
-
+```
+[CRR, EER, scores, FPR, FNR] = iVectorEvalRocca(training_data, testing_data, ubms,channel)
+[SUB_SES, SUB, SES, scores] = iVectorEvalRocca2(ubms, training_data, testing_data, subjects, sessions)
+```

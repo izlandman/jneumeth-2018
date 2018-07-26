@@ -1,12 +1,12 @@
 % plot data from 10s, 5s, 2s, and 1s epoch based results
-function epochVccr(epoch_10, epoch_5, epoch_2, epoch_1)
+function epochVcrr(epoch_10, epoch_5, epoch_2, epoch_1)
 
 % collect data from each experiment
 % data, [x y], epoch
-ccr_data = cell(3,2,4);
-ccr_sub = cell(3,2,4);
-eer_data = ccr_data;
-eer_sub = ccr_data;
+crr_data = cell(3,2,4);
+crr_sub = cell(3,2,4);
+eer_data = crr_data;
+eer_sub = crr_data;
 labels = cell(3,4);
 % cells! (1) sub_ses_data (2) sub_data (3) ses_data
 [epoch_10_m, epoch_10_g, epoch_10_i ]= expTriFolder(epoch_10,0);
@@ -90,40 +90,40 @@ h_bot.FontSize = f_size;
 % Subject-Session Performance
 %% 10s
 name = '10s';
-[ccr_data(:,:,1), labels(:,1)] = extractSubSes(epoch_10_m{1},...
+[crr_data(:,:,1), labels(:,1)] = extractSubSes(epoch_10_m{1},...
     epoch_10_g{1},epoch_10_i{1},name,1);
 [eer_data(:,:,1), labels(:,1)] = extractSubSes(epoch_10_m{1},...
     epoch_10_g{1},epoch_10_i{1},name,2);
-[ccr_sub(:,:,1),eer_sub(:,:,1)] = extractSub(epoch_10_m{2},...
+[crr_sub(:,:,1),eer_sub(:,:,1)] = extractSub(epoch_10_m{2},...
     epoch_10_g{2},epoch_10_i{2},name);
 %% 5s
 name = '5s';
-[ccr_data(:,:,2), labels(:,2)] = extractSubSes(epoch_5_m{1},...
+[crr_data(:,:,2), labels(:,2)] = extractSubSes(epoch_5_m{1},...
     epoch_5_g{1},epoch_5_i{1},name,1);
 [eer_data(:,:,2), labels(:,2)] = extractSubSes(epoch_5_m{1},...
     epoch_5_g{1},epoch_5_i{1},name,2);
-[ccr_sub(:,:,2),eer_sub(:,:,2)] = extractSub(epoch_5_m{2},...
+[crr_sub(:,:,2),eer_sub(:,:,2)] = extractSub(epoch_5_m{2},...
     epoch_5_g{2},epoch_5_i{2},name);
 %%  2s
 name = '2s';
-[ccr_data(:,:,3), labels(:,3)] = extractSubSes(epoch_2_m{1},...
+[crr_data(:,:,3), labels(:,3)] = extractSubSes(epoch_2_m{1},...
     epoch_2_g{1},epoch_2_i{1},name,1);
 [eer_data(:,:,3), labels(:,3)] = extractSubSes(epoch_2_m{1},...
     epoch_2_g{1},epoch_2_i{1},name,2);
-[ccr_sub(:,:,3),eer_sub(:,:,3)] = extractSub(epoch_2_m{2},...
+[crr_sub(:,:,3),eer_sub(:,:,3)] = extractSub(epoch_2_m{2},...
     epoch_2_g{2},epoch_2_i{2},name);
 %% 1s
 name = '1s';
-[ccr_data(:,:,4), labels(:,4)] = extractSubSes(epoch_1_m{1},...
+[crr_data(:,:,4), labels(:,4)] = extractSubSes(epoch_1_m{1},...
     epoch_1_g{1},epoch_1_i{1},name,1);
 [eer_data(:,:,4), labels(:,4)] = extractSubSes(epoch_1_m{1},...
     epoch_1_g{1},epoch_1_i{1},name,2);
-[ccr_sub(:,:,4),eer_sub(:,:,4)] = extractSub(epoch_1_m{2},...
+[crr_sub(:,:,4),eer_sub(:,:,4)] = extractSub(epoch_1_m{2},...
     epoch_1_g{2},epoch_1_i{2},name);
 
 % build newScore data!
-mixtures = numel(ccr_data{end,end,end});
-time_steps = size(ccr_data,3);
+mixtures = numel(crr_data{end,end,end});
+time_steps = size(crr_data,3);
 mahal_newScores = zeros(1,2,time_steps);
 gmm_newScores = zeros(mixtures,2,time_steps);
 ivector_newScores = zeros(mixtures,2,time_steps);
@@ -132,21 +132,21 @@ g_plot_scores = zeros(mixtures,2,time_steps);
 i_plot_scores = zeros(mixtures,2,time_steps);
 
 for i=1:time_steps
-    mahal_newScores(:,1,i) = newScore(ccr_data{1,1,i},ccr_sub{1,1,i});
-    mahal_newScores(:,2,i) = newScore(ccr_sub{1,1,i}',eer_sub{1,1,i}');
-    m_plot_scores(:,1,i) = newScore(ccr_data{1,1,i},ccr_data{1,1,i});
-    gmm_newScores(:,1,i) = newScore(ccr_data{2,1,i},ccr_sub{2,1,i});
-    gmm_newScores(:,2,i) = newScore(ccr_sub{2,1,i},eer_sub{2,1,i});
-    g_plot_scores(:,1,i) = newScore(ccr_data{2,1,i},ccr_data{2,1,i});
-    ivector_newScores(:,1,i) = newScore(ccr_data{3,1,i},ccr_sub{3,1,i});
-    ivector_newScores(:,2,i) = newScore(ccr_sub{3,1,i},eer_sub{3,1,i});
-    i_plot_scores(:,1,i) = newScore(ccr_data{3,1,i},ccr_data{3,1,i});
+    mahal_newScores(:,1,i) = newScore(crr_data{1,1,i},crr_sub{1,1,i});
+    mahal_newScores(:,2,i) = newScore(crr_sub{1,1,i}',eer_sub{1,1,i}');
+    m_plot_scores(:,1,i) = newScore(crr_data{1,1,i},crr_data{1,1,i});
+    gmm_newScores(:,1,i) = newScore(crr_data{2,1,i},crr_sub{2,1,i});
+    gmm_newScores(:,2,i) = newScore(crr_sub{2,1,i},eer_sub{2,1,i});
+    g_plot_scores(:,1,i) = newScore(crr_data{2,1,i},crr_data{2,1,i});
+    ivector_newScores(:,1,i) = newScore(crr_data{3,1,i},crr_sub{3,1,i});
+    ivector_newScores(:,2,i) = newScore(crr_sub{3,1,i},eer_sub{3,1,i});
+    i_plot_scores(:,1,i) = newScore(crr_data{3,1,i},crr_data{3,1,i});
 end
 
 % add additional plot focusing on the higher mixtures and combine onto a
 % single plot
 m_size_diss = 25;
-l_size_diss = 1.5;
+l_size_diss = 5;
 f_size_diss = 30;
 line_sty = {'s:' , 'o:', 'p:'};
 % marker_sty = {'o', 's', 'p'};
