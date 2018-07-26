@@ -18,7 +18,7 @@ These files were written to be run on a computing cluster operating **qsub**. Th
 
 ## Process raw data
 
-To produce the cepstrum (HTK), power spectral density (PSD), and spectral coherence (COH) features the following functions are used to modify the EDF files.
+To produce the cepstrum (CEP), power spectral density (PSD), and spectral coherence (COH) features the following functions are used to modify the EDF files.
 
 The PSD and COH features were based on the work of La Rocca et al's 2014 paper: _Human Brain Distinctiveness Based on EEG Spectral Coherence Connectivity_ 
 
@@ -32,9 +32,19 @@ The PSD and COH features were based on the work of La Rocca et al's 2014 paper: 
  
  To produce the HTK features the same function is used, but **feature_type** is set to 2 for CEP. This approach requires the incoming list to be a list of .HTK files from the already processed .EDF files. Producing the HTK features, 1 second windows with 1/10 second frames using a TCP montage resulting in 22 channels, is outlined in a [paper](https://arxiv.org/ftp/arxiv/papers/1801/1801.02477.pdf) by Harati et al.
  
- ```
- laRoccaFeatureBuilder(file_list, feature_type, final_folder, n_epochs, workers)
- ```
+ ### Produce CEPSTRUM features
+ 
+ The functionality to produce COH and PSD features is built from processing .EDF files. To produce the CEP features, a bit more work is required. Specifically access to VOICEBOX's melcepst.m, writehtk.m, and readhtk.m functions are required. This allows for the .EDF files to be converted into CEPSTRUM features, tagged typically with a .htk extension.
+```
+[edf_header, edf_data] = edfread(file_name);
+sample_rate = edf_header.samples(1);
+mel_options = 'Mtaf';
+mel_coef = 25;
+sample_end = sample_start + window_size - 1;
+data_mel = edf_data(channel,sample_start:sample_end);
+htk_features = melcepst( data_mel, sample_rate, mel_options, mel_coef)
+writehtk(file,data,frame_period,type_code);
+```
 
  All three of these processes produce binary files containing the feature data of all channels organized by the subject, session, and epoch. This was done as the COH feature produce a very large number of channels, in excess of the number of epochs that could be produced from the sampled data.
  
