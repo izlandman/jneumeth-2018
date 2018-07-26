@@ -10,7 +10,9 @@ delete(gcp('nocreate'))
 cluster = parcluster('local');
 cluster.NumWorkers = workers;
 % this needs to be ON for cluster operation and OFF for local debugging
-% cluster.JobStorageLocation = getenv('HOME');
+if( isunix )
+    cluster.JobStorageLocation = getenv('HOME');
+end
 parpool(cluster,workers, 'IdleTimeout', Inf);
 
 % process parameters
@@ -39,9 +41,11 @@ for i=1:iterations
     
     % produce train/test split (train is enroll  for I-Vector)
     [train, test] = dataCurate(data_source,element_listing);
+    fprintf('Split data\n');
     
     % build ubms
     ubms = allUBMs(train(:), mixtures, ubm_iters, ds_factor,0,0);
+    fprintf('Build UBMs\n');
     
     % perform experiments
     fprintf('Mahal: %d\n',i);
