@@ -73,15 +73,9 @@ An example paramFile.dat is provided and contains the following:
 #
 #
 # files, list as many as necessary. assumes they are sessions!
-4
-C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R01.list
-C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R02.list
-C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R03.list
-C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R04.list
-#
-#
-# if the files are .htk these next lines provide block size and overlap
-0 0
+2
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\_10second\CEP\features_R01.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\_10second\CEP\features_R02.list
 #
 #
 # number of iterations to perform experiments
@@ -93,7 +87,7 @@ C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R04.li
 #
 #
 # number of mixtures for UBM
-2 4 8 16
+2 4
 #
 #
 # number of iterations to build UBM
@@ -110,6 +104,7 @@ C:\Users\NIL\Documents\_NeuroNixCopy\PhysioNet\paramTest
 #
 #
 EOF
+
 ```
 
 ## Results

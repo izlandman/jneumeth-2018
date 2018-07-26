@@ -9,7 +9,7 @@ catch
     error('fopen(paramfile); failed!\n');
 end
 
-param_count = 9;
+param_count = 8;
 iter = 1;
 while iter <= param_count
     new_line = fgetl(fid);
@@ -28,32 +28,26 @@ while iter <= param_count
                 end
                 iter = iter + 1;
             case 3
-                % handle blocks
-                nums = strsplit(new_line,' ');
-                b_size = str2double(nums{1});
-                b_overlap = str2double(nums{2});
-                iter = iter + 1;
-            case 4
                 % handle iterations
                 iterations = str2double(new_line);
                 iter = iter + 1;
-            case 5
+            case 4
                 % handle elements withheld
                 element_listing = str2double(new_line);
                 iter = iter + 1;
-            case 6
+            case 5
                 % handle mixtures
                 mixtures = str2double(strsplit(new_line,' '));
                 iter = iter + 1;
-            case 7
+            case 6
                 % handle ubm_iters
                 ubm_iters = str2double(new_line);
                 iter = iter + 1;
-            case 8
+            case 7
                 % handle ds_factor
                 ds_factor = str2double(new_line);
                 iter = iter + 1;
-            case 9
+            case 8
                 % handle save_location
                 save_location = new_line;
                 iter = iter + 1;
@@ -62,10 +56,6 @@ while iter <= param_count
         end
     end
 end
-if( b_size == 0 )
-    list_args = {files{:}};
-else
-    list_args = {b_size,b_overlap,files{:}};
-end
+list_args = {files{:}};
 fclose(fid);
 end
