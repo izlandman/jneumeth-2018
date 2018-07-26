@@ -64,6 +64,54 @@ This experiment does not run from a parameter file so all arguments must be pass
 experimentTrio(param_file,workers)
 ```
 
+An example paramFile.dat is provided and contains the following:
+```
+# Parameter File for experiments
+#
+# subjects
+109
+#
+#
+# files, list as many as necessary. assumes they are sessions!
+4
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R01.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R02.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R03.list
+C:\Users\NIL\Documents\_NeuroNixCopy\physioNet\_laRoccaFeats\PSD\features_R04.list
+#
+#
+# if the files are .htk these next lines provide block size and overlap
+0 0
+#
+#
+# number of iterations to perform experiments
+6
+#
+#
+# elements to withhold for testing data
+1
+#
+#
+# number of mixtures for UBM
+2 4 8 16
+#
+#
+# number of iterations to build UBM
+20
+#
+#
+# ds_factor, scaling for UBM generation
+1
+#
+#
+# save_location, where to write experiment using full pathname
+C:\Users\NIL\Documents\_NeuroNixCopy\PhysioNet\paramTest
+#
+#
+#
+EOF
+```
+
 ## Results
 
 Performance of the algorithms is evaluated in terms of correct recognition rate (CRR) and equal error rate (EER) averaged over each subject-channel's CV steps. This provides a robust performance metric that can be compared against other EEG classification papers (not all experiments report CCR and/or EER thus having both helps readily compare techniques).
