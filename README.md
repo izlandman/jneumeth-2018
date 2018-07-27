@@ -34,16 +34,17 @@ The PSD and COH features were based on the work of La Rocca et al's 2014 paper: 
  
  ### Produce CEPSTRUM features
  
- The functionality to produce COH and PSD features is built from processing .EDF files. To produce the CEP features, a bit more work is required. Specifically access to VOICEBOX's melcepst.m, writehtk.m, and readhtk.m functions are required. This allows for the .EDF files to be converted into CEPSTRUM features, tagged typically with a .htk extension.
+ The functionality to produce COH and PSD features is built from processing .EDF files. To produce the CEP features, a bit more work is required as the tools to generate them cannot be released at this time. However, to recreate them access to VOICEBOX's melcepst.m, writehtk.m, and readhtk.m functions are all that is required. Using these tools and the associated paper cited in the article allows for the .EDF files to be converted into the features used in experiment. Sample code of how this process is provided below.
 ```
 [edf_header, edf_data] = edfread(file_name);
 sample_rate = edf_header.samples(1);
-mel_options = 'Mtaf';
-mel_coef = 25;
+mel_options = 'MtaEfdD';
+mel_coef = 8;
 sample_end = sample_start + window_size - 1;
 data_mel = edf_data(channel,sample_start:sample_end);
-htk_features = melcepst( data_mel, sample_rate, mel_options, mel_coef)
-writehtk(file,data,frame_period,type_code);
+htk_features = melcepst(data_mel, sample_rate, mel_options, mel_coef)
+epoch_index = [5:10:size(htk_features,1)];
+htk_epochs = htk_features(epoch_index,:);
 ```
 
  All three of these processes produce binary files containing the feature data of all channels organized by the subject, session, and epoch. This was done as the COH feature produce a very large number of channels, in excess of the number of epochs that could be produced from the sampled data.
