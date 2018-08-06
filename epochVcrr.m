@@ -28,7 +28,7 @@ cI = uniteEpochs(1,epoch_10_i{1},epoch_5_i{1},epoch_2_i{1},epoch_1_i{1});
 % err_m = ebarPlot(eM,2);
 % err_g = ebarPlot(eG,2);
 % err_i = ebarPlot(eI,2);
-% 
+%
 % figure('Name','Stretched Sub-Plots','NumberTitle','off');
 % grid on; hold on;
 % subplot(311);
@@ -44,8 +44,17 @@ f_size = 30;
 e_max = max(max(cat(1,eM(1,:),eG(1,:),eI(1,:))))+...
     max(max(cat(1,eM(2,:),eG(2,:),eI(2,:))));
 e_max = 0.05*ceil(e_max/0.05);
-figure('Name',[epoch_10 ' | Stretch Sub-Plot of the Future'],...
-    'NumberTitle','off','units','normalized','outerposition',[0  0 1 1]);
+
+% when run on cluster, don't display figure
+if( isunix )
+    figure('Name',[epoch_10 ' | Stretch Sub-Plot of the Future'],...
+        'NumberTitle','off','units','normalized','outerposition',...
+        [0 0 1 1],'visible','off');
+else
+    figure('Name',[epoch_10 ' | Stretch Sub-Plot of the Future'],...
+        'NumberTitle','off','units','normalized','outerposition',...
+        [0 0 1 1]);
+end
 subplot(311);grid on; title('Mahalanobis Performance');
 errorYY(eM,cM,l_size,f_size,e_max);
 subplot(312);grid on; title('GMM-UBM Performance');
@@ -71,21 +80,9 @@ h_bot.TickLength(1) = 0;
 xlabel('Epoch Size (seconds)');
 h_bot.FontSize = f_size;
 
-% l_size = 3;
-% figure('name','EER','NumberTitle','off');
-% hold on; grid on;
-% ebarPlotPrep(epoch_10_g{1},l_size);
-% ebarPlotPrep(epoch_10_i{1},l_size);
-% ebarPlotPrep(epoch_10_m{1},l_size);
-% ebarPlotPrep(epoch_5_g{1},l_size);
-% ebarPlotPrep(epoch_5_i{1},l_size);
-% ebarPlotPrep(epoch_5_m{1},l_size);
-% ebarPlotPrep(epoch_2_g{1},l_size);
-% ebarPlotPrep(epoch_2_i{1},l_size);
-% ebarPlotPrep(epoch_2_m{1},l_size);
-% ebarPlotPrep(epoch_1_g{1},l_size);
-% ebarPlotPrep(epoch_1_i{1},l_size);
-% ebarPlotPrep(epoch_1_m{1},l_size);
+% save figure to file!
+saveas(gcf,[epoch_10 filesep 'sweep_result'],'fig');
+saveas(gcf,[epoch_10 filesep 'sweep_result'],'eps');
 
 % Subject-Session Performance
 %% 10s
@@ -153,7 +150,11 @@ line_sty = {'s:' , 'o:', 'p:'};
 color_sty = {'r','b'};
 m_range = [5 9];
 
-figure('numbertitle','off','name','Grouped Results');
+if( isunix )
+    figure('numbertitle','off','name','Grouped Results','visible','off');
+else
+    figure('numbertitle','off','name','Grouped Results');
+end
 % first plot
 x1_min = 0.09;
 y1_min = 0.55;
@@ -192,6 +193,10 @@ y_top = max([max(epoch_1_m{1}(m_range(1):m_range(2),1,1)),...
 ylim([y_bot*.98 y_top*1.01]);
 grid on;
 set(gca,'fontsize',f_size_diss);
+
+% save figure!
+saveas(gcf,[epoch_10 filesep 'sub_result'],'fig');
+saveas(gcf,[epoch_10 filesep 'sub_result'],'eps');
 
 % second plot
 y_axis = y1_min-0.02;
@@ -240,13 +245,13 @@ set(gca,'fontsize',f_size_diss);
 % % Pure Subject Matching
 % doublePlotCcr(ccr_sub,labels,'CCR');
 % doublePlotEer(eer_sub,labels,'EER');
-% 
+%
 % % CCR
 % doublePlotCcr(ccr_data,labels,'CCR');
-% 
+%
 % % EER
 % doublePlotEer(eer_data,labels,'EER');
-% 
+%
 % % circles?
 % circlePlot(m_plot_scores,g_plot_scores,i_plot_scores);
 end
@@ -273,7 +278,7 @@ set(gca,'FontSize',f_size);
 
 ax = gca;
 outerpos = ax.OuterPosition;
-ti = ax.TightInset; 
+ti = ax.TightInset;
 left = outerpos(1) + ti(1);
 bottom = outerpos(2) + ti(2);
 ax_width = outerpos(3) - ti(1) - ti(3);
